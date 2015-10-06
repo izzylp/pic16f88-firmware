@@ -1,0 +1,1495 @@
+gpasm-1.2.0 #980 (Jun  5 2013) build/default/   6-24-2015  15:41:23         PAGE  1
+
+
+LOC  OBJECT CODE     LINE SOURCE TEXT
+  VALUE
+
+                      00001 ;--------------------------------------------------------
+                      00002 ; File Created by SDCC : free open source ANSI-C Compiler
+                      00003 ; Version 3.3.0 #8604 (May 11 2013) (Linux)
+                      00004 ; This file was generated Wed Jun 24 15:41:23 2015
+                      00005 ;--------------------------------------------------------
+                      00006 ; PIC port for the 14-bit core
+                      00007 ;--------------------------------------------------------
+                      00008 ;       .file   "interrupt.c"
+                      00009         list    p=16f88
+                      00010         radix dec
+                      00011         include "p16f88.inc"
+                      00001         LIST
+                      00002 
+                      00003 ;==========================================================================
+                      00004 ;  MPASM PIC16F88 processor include
+                      00005 ; 
+                      00006 ;  (c) Copyright 1999-2013 Microchip Technology, All rights reserved
+                      00007 ;==========================================================================
+                      00008 
+                      00549         LIST
+                      00012 ;--------------------------------------------------------
+                      00013 ; external declarations
+                      00014 ;--------------------------------------------------------
+  0000                00015         extern  _timer_init
+  0000                00016         extern  _timer_start
+  0000                00017         extern  _adc_init
+  0000                00018         extern  _adc_start
+  0000                00019         extern  _pwm_init
+  0000                00020         extern  _pwm_output
+  0000                00021         extern  ___sint2fs
+  0000                00022         extern  ___fsmul
+  0000                00023         extern  ___fsadd
+  0000                00024         extern  ___fs2sint
+  0000                00025         extern  _STATUSbits
+  0000                00026         extern  _PORTAbits
+  0000                00027         extern  _PORTBbits
+  0000                00028         extern  _INTCONbits
+  0000                00029         extern  _PIR1bits
+  0000                00030         extern  _PIR2bits
+  0000                00031         extern  _T1CONbits
+  0000                00032         extern  _T2CONbits
+  0000                00033         extern  _SSPCONbits
+  0000                00034         extern  _CCP1CONbits
+  0000                00035         extern  _RCSTAbits
+  0000                00036         extern  _ADCON0bits
+  0000                00037         extern  _OPTION_REGbits
+  0000                00038         extern  _TRISAbits
+  0000                00039         extern  _TRISBbits
+  0000                00040         extern  _PIE1bits
+  0000                00041         extern  _PIE2bits
+  0000                00042         extern  _PCONbits
+  0000                00043         extern  _OSCCONbits
+  0000                00044         extern  _OSCTUNEbits
+gpasm-1.2.0 #980 (Jun  5 2013) build/default/   6-24-2015  15:41:23         PAGE  2
+
+
+LOC  OBJECT CODE     LINE SOURCE TEXT
+  VALUE
+
+  0000                00045         extern  _SSPSTATbits
+  0000                00046         extern  _TXSTAbits
+  0000                00047         extern  _ANSELbits
+  0000                00048         extern  _CMCONbits
+  0000                00049         extern  _CVRCONbits
+  0000                00050         extern  _ADCON1bits
+  0000                00051         extern  _WDTCONbits
+  0000                00052         extern  _EECON1bits
+  0000                00053         extern  _INDF
+  0000                00054         extern  _TMR0
+  0000                00055         extern  _PCL
+  0000                00056         extern  _STATUS
+  0000                00057         extern  _FSR
+  0000                00058         extern  _PORTA
+  0000                00059         extern  _PORTB
+  0000                00060         extern  _PCLATH
+  0000                00061         extern  _INTCON
+  0000                00062         extern  _PIR1
+  0000                00063         extern  _PIR2
+  0000                00064         extern  _TMR1
+  0000                00065         extern  _TMR1L
+  0000                00066         extern  _TMR1H
+  0000                00067         extern  _T1CON
+  0000                00068         extern  _TMR2
+  0000                00069         extern  _T2CON
+  0000                00070         extern  _SSPBUF
+  0000                00071         extern  _SSPCON
+  0000                00072         extern  _CCPR1
+  0000                00073         extern  _CCPR1L
+  0000                00074         extern  _CCPR1H
+  0000                00075         extern  _CCP1CON
+  0000                00076         extern  _RCSTA
+  0000                00077         extern  _TXREG
+  0000                00078         extern  _RCREG
+  0000                00079         extern  _ADRESH
+  0000                00080         extern  _ADCON0
+  0000                00081         extern  _OPTION_REG
+  0000                00082         extern  _TRISA
+  0000                00083         extern  _TRISB
+  0000                00084         extern  _PIE1
+  0000                00085         extern  _PIE2
+  0000                00086         extern  _PCON
+  0000                00087         extern  _OSCCON
+  0000                00088         extern  _OSCTUNE
+  0000                00089         extern  _PR2
+  0000                00090         extern  _SSPADD
+  0000                00091         extern  _SSPSTAT
+  0000                00092         extern  _TXSTA
+  0000                00093         extern  _SPBRG
+  0000                00094         extern  _ANSEL
+  0000                00095         extern  _CMCON
+  0000                00096         extern  _CVRCON
+  0000                00097         extern  _ADRESL
+gpasm-1.2.0 #980 (Jun  5 2013) build/default/   6-24-2015  15:41:23         PAGE  3
+
+
+LOC  OBJECT CODE     LINE SOURCE TEXT
+  VALUE
+
+  0000                00098         extern  _ADCON1
+  0000                00099         extern  _WDTCON
+  0000                00100         extern  _EEDATA
+  0000                00101         extern  _EEADR
+  0000                00102         extern  _EEDATH
+  0000                00103         extern  _EEADRH
+  0000                00104         extern  _EECON1
+  0000                00105         extern  _EECON2
+  0000                00106         extern  ___sdcc_saved_fsr
+                      00107 
+  0000                00108         extern PSAVE
+  0000                00109         extern SSAVE
+  0000                00110         extern WSAVE
+  0000                00111         extern STK12
+  0000                00112         extern STK11
+  0000                00113         extern STK10
+  0000                00114         extern STK09
+  0000                00115         extern STK08
+  0000                00116         extern STK07
+  0000                00117         extern STK06
+  0000                00118         extern STK05
+  0000                00119         extern STK04
+  0000                00120         extern STK03
+  0000                00121         extern STK02
+  0000                00122         extern STK01
+  0000                00123         extern STK00
+                      00124 ;--------------------------------------------------------
+                      00125 ; global declarations
+                      00126 ;--------------------------------------------------------
+  0000                00127         global  _interrupt_external_enable
+  0000                00128         global  _interrupt_adc_enable
+  0000                00129         global  _interrupt_timer_enable
+  0000                00130         global  _interrupt_peripheral_enable
+  0000                00131         global  _interrupt_global_enable
+  0000                00132         global  ___isr
+                      00133 
+                      00134 ;--------------------------------------------------------
+                      00135 ; global definitions
+                      00136 ;--------------------------------------------------------
+                      00137 ;--------------------------------------------------------
+                      00138 ; absolute symbol definitions
+                      00139 ;--------------------------------------------------------
+                      00140 ;--------------------------------------------------------
+                      00141 ; compiler-defined variables
+                      00142 ;--------------------------------------------------------
+                      00143 UDL_interrupt_0 udata
+0000                  00144 r0x100A res     1
+0001                  00145 r0x1009 res     1
+0002                  00146 r0x1008 res     1
+0003                  00147 r0x100B res     1
+0004                  00148 r0x100C res     1
+0005                  00149 r0x100E res     1
+0006                  00150 r0x100D res     1
+gpasm-1.2.0 #980 (Jun  5 2013) build/default/   6-24-2015  15:41:23         PAGE  4
+
+
+LOC  OBJECT CODE     LINE SOURCE TEXT
+  VALUE
+
+                      00151 ;--------------------------------------------------------
+                      00152 ; initialized data
+                      00153 ;--------------------------------------------------------
+                      00154 
+                      00155 ID_interrupt_0  idata
+0000                  00156 _ciclos
+0000   99 F9          00157         db      0x99, 0xf9
+                      00158 
+                      00159 
+                      00160 ID_interrupt_1  idata
+0000                  00161 _adc_canal
+0000   FF             00162         db      0xff
+                      00163 
+                      00164 
+                      00165 ID_interrupt_2  idata
+0000                  00166 _adc_result
+0000   00 00          00167         db      0x00, 0x00
+                      00168 
+                      00169 
+                      00170 ID_interrupt_3  idata
+0000                  00171 _pwm_valor
+0000   00 00          00172         db      0x00, 0x00
+                      00173 
+                      00174 
+                      00175 ID_interrupt_4  idata
+0000                  00176 _pwm_float
+0000   00 00 00 00    00177         db      0x00, 0x00, 0x00, 0x00
+                      00178 
+                      00179 ;--------------------------------------------------------
+                      00180 ; overlayable items in internal ram 
+                      00181 ;--------------------------------------------------------
+                      00182 ;       udata_ovr
+                      00183 ;--------------------------------------------------------
+                      00184 ; interrupt and initialization code
+                      00185 ;--------------------------------------------------------
+                      00186 c_interrupt     code    0x4
+0004                  00187 __sdcc_interrupt
+                      00188 ;***
+                      00189 ;  pBlock Stats: dbName = I
+                      00190 ;***
+                      00191 ;entry:  ___isr ;Function start
+                      00192 ; 0 exit points
+                      00193 ;functions called:
+                      00194 ;   ___sint2fs
+                      00195 ;   ___fsmul
+                      00196 ;   ___fsadd
+                      00197 ;   ___fs2sint
+                      00198 ;   ___sint2fs
+                      00199 ;   ___fsmul
+                      00200 ;   ___fsadd
+                      00201 ;   ___fs2sint
+                      00202 ;   _adc_start
+                      00203 ;   ___sint2fs
+gpasm-1.2.0 #980 (Jun  5 2013) build/default/   6-24-2015  15:41:23         PAGE  5
+
+
+LOC  OBJECT CODE     LINE SOURCE TEXT
+  VALUE
+
+                      00204 ;   ___fsmul
+                      00205 ;   ___fsadd
+                      00206 ;   ___fs2sint
+                      00207 ;   ___sint2fs
+                      00208 ;   ___fsmul
+                      00209 ;   ___fsadd
+                      00210 ;   ___fs2sint
+                      00211 ;   _adc_start
+                      00212 ;11 compiler assigned registers:
+                      00213 ;   r0x100B
+                      00214 ;   r0x100C
+                      00215 ;   STK00
+                      00216 ;   r0x100D
+                      00217 ;   r0x100E
+                      00218 ;   STK01
+                      00219 ;   STK02
+                      00220 ;   STK06
+                      00221 ;   STK05
+                      00222 ;   STK04
+                      00223 ;   STK03
+                      00224 ;; Starting pCode block
+0004                  00225 ___isr  ;Function start
+                      00226 ; 0 exit points
+                      00227 ;       .line   61; "interrupt.c"       void __isr(void) __interrupt (1)
+0004   00??           00228         MOVWF   WSAVE
+0005   0E03           00229         SWAPF   STATUS,W
+0006   0183           00230         CLRF    STATUS
+0007   00??           00231         MOVWF   SSAVE
+0008   080A           00232         MOVF    PCLATH,W
+0009   018A           00233         CLRF    PCLATH
+000A   00??           00234         MOVWF   PSAVE
+000B   0804           00235         MOVF    FSR,W
+000C   ???? ????      00236         BANKSEL ___sdcc_saved_fsr
+000E   00??           00237         MOVWF   ___sdcc_saved_fsr
+                      00238 ;       .line   64; "interrupt.c"       if (BIT_TST(PIR1, 0)) {
+000F   ???? ????      00239         BANKSEL _PIR1
+0011   08??           00240         MOVF    _PIR1,W
+0012   3901           00241         ANDLW   0x01
+0013   ???? ????      00242         BANKSEL r0x100B
+0015   00??           00243         MOVWF   r0x100B
+0016   08??           00244         MOVF    r0x100B,W
+0017   1903           00245         BTFSC   STATUS,2
+0018   2???           00246         GOTO    _00136_DS_
+                      00247 ;       .line   67; "interrupt.c"       BIT_FLP(PORTB, 4);
+0019   3010           00248         MOVLW   0x10
+001A   ???? ????      00249         BANKSEL _PORTB
+001C   06??           00250         XORWF   _PORTB,F
+                      00251 ;       .line   70; "interrupt.c"       if (!BIT_TST(ADCON0, 2)) {
+001D   08??           00252         MOVF    _ADCON0,W
+001E   3904           00253         ANDLW   0x04
+001F   1D03           00254         BTFSS   STATUS,2
+0020   3001           00255         MOVLW   0x01
+0021   ???? ????      00256         BANKSEL r0x100B
+gpasm-1.2.0 #980 (Jun  5 2013) build/default/   6-24-2015  15:41:23         PAGE  6
+
+
+LOC  OBJECT CODE     LINE SOURCE TEXT
+  VALUE
+
+0023   00??           00257         MOVWF   r0x100B
+0024   08??           00258         MOVF    r0x100B,W
+0025   1D03           00259         BTFSS   STATUS,2
+0026   2???           00260         GOTO    _00134_DS_
+                      00261 ;       .line   71; "interrupt.c"       if (adc_canal == ADC1) {
+0027   ???? ????      00262         BANKSEL _adc_canal
+0029   08??           00263         MOVF    _adc_canal,W
+002A   1D03           00264         BTFSS   STATUS,2
+002B   2???           00265         GOTO    _00131_DS_
+                      00266 ;       .line   74; "interrupt.c"       BIT_FLP(PORTB, 5);
+002C   3020           00267         MOVLW   0x20
+002D   ???? ????      00268         BANKSEL _PORTB
+002F   06??           00269         XORWF   _PORTB,F
+                      00270 ;       .line   77; "interrupt.c"       pwm_valor = 0.6452 * (adc_result - 1023) + 1010;
+0030   3001           00271         MOVLW   0x01
+0031   ???? ????      00272         BANKSEL _adc_result
+0033   07??           00273         ADDWF   _adc_result,W
+0034   ???? ????      00274         BANKSEL r0x100B
+0036   00??           00275         MOVWF   r0x100B
+0037   30FC           00276         MOVLW   0xfc
+0038   00??           00277         MOVWF   r0x100C
+0039   ???? ????      00278         BANKSEL _adc_result
+003B   08??           00279         MOVF    (_adc_result + 1),W
+003C   1803           00280         BTFSC   STATUS,0
+003D   0A??           00281         INCF    (_adc_result + 1),W
+003E   1903           00282         BTFSC   STATUS,2
+003F   2???           00283         GOTO    _00001_DS_
+0040   ???? ????      00284         BANKSEL r0x100C
+0042   07??           00285         ADDWF   r0x100C,F
+0043                  00286 _00001_DS_
+0043   ???? ????      00287         BANKSEL r0x100B
+0045   08??           00288         MOVF    r0x100B,W
+0046   00??           00289         MOVWF   STK00
+0047   08??           00290         MOVF    r0x100C,W
+0048   ????           00291         PAGESEL ___sint2fs
+0049   2???           00292         CALL    ___sint2fs
+004A   ????           00293         PAGESEL $
+004B   ???? ????      00294         BANKSEL r0x100D
+004D   00??           00295         MOVWF   r0x100D
+004E   08??           00296         MOVF    STK00,W
+004F   00??           00297         MOVWF   r0x100E
+0050   08??           00298         MOVF    STK01,W
+0051   00??           00299         MOVWF   r0x100C
+0052   08??           00300         MOVF    STK02,W
+0053   00??           00301         MOVWF   r0x100B
+0054   00??           00302         MOVWF   STK06
+0055   08??           00303         MOVF    r0x100C,W
+0056   00??           00304         MOVWF   STK05
+0057   08??           00305         MOVF    r0x100E,W
+0058   00??           00306         MOVWF   STK04
+0059   08??           00307         MOVF    r0x100D,W
+005A   00??           00308         MOVWF   STK03
+005B   30D4           00309         MOVLW   0xd4
+gpasm-1.2.0 #980 (Jun  5 2013) build/default/   6-24-2015  15:41:23         PAGE  7
+
+
+LOC  OBJECT CODE     LINE SOURCE TEXT
+  VALUE
+
+005C   00??           00310         MOVWF   STK02
+005D   302B           00311         MOVLW   0x2b
+005E   00??           00312         MOVWF   STK01
+005F   3025           00313         MOVLW   0x25
+0060   00??           00314         MOVWF   STK00
+0061   303F           00315         MOVLW   0x3f
+0062   ????           00316         PAGESEL ___fsmul
+0063   2???           00317         CALL    ___fsmul
+0064   ????           00318         PAGESEL $
+0065   ???? ????      00319         BANKSEL r0x100D
+0067   00??           00320         MOVWF   r0x100D
+0068   08??           00321         MOVF    STK00,W
+0069   00??           00322         MOVWF   r0x100E
+006A   08??           00323         MOVF    STK01,W
+006B   00??           00324         MOVWF   r0x100C
+006C   08??           00325         MOVF    STK02,W
+006D   00??           00326         MOVWF   r0x100B
+006E   3000           00327         MOVLW   0x00
+006F   00??           00328         MOVWF   STK06
+0070   3080           00329         MOVLW   0x80
+0071   00??           00330         MOVWF   STK05
+0072   307C           00331         MOVLW   0x7c
+0073   00??           00332         MOVWF   STK04
+0074   3044           00333         MOVLW   0x44
+0075   00??           00334         MOVWF   STK03
+0076   08??           00335         MOVF    r0x100B,W
+0077   00??           00336         MOVWF   STK02
+0078   08??           00337         MOVF    r0x100C,W
+0079   00??           00338         MOVWF   STK01
+007A   08??           00339         MOVF    r0x100E,W
+007B   00??           00340         MOVWF   STK00
+007C   08??           00341         MOVF    r0x100D,W
+007D   ????           00342         PAGESEL ___fsadd
+007E   2???           00343         CALL    ___fsadd
+007F   ????           00344         PAGESEL $
+0080   ???? ????      00345         BANKSEL r0x100D
+0082   00??           00346         MOVWF   r0x100D
+0083   08??           00347         MOVF    STK00,W
+0084   00??           00348         MOVWF   r0x100E
+0085   08??           00349         MOVF    STK01,W
+0086   00??           00350         MOVWF   r0x100C
+0087   08??           00351         MOVF    STK02,W
+0088   00??           00352         MOVWF   r0x100B
+0089   00??           00353         MOVWF   STK02
+008A   08??           00354         MOVF    r0x100C,W
+008B   00??           00355         MOVWF   STK01
+008C   08??           00356         MOVF    r0x100E,W
+008D   00??           00357         MOVWF   STK00
+008E   08??           00358         MOVF    r0x100D,W
+008F   ????           00359         PAGESEL ___fs2sint
+0090   2???           00360         CALL    ___fs2sint
+0091   ????           00361         PAGESEL $
+0092   ???? ????      00362         BANKSEL _pwm_valor
+gpasm-1.2.0 #980 (Jun  5 2013) build/default/   6-24-2015  15:41:23         PAGE  8
+
+
+LOC  OBJECT CODE     LINE SOURCE TEXT
+  VALUE
+
+0094   00??           00363         MOVWF   (_pwm_valor + 1)
+0095   08??           00364         MOVF    STK00,W
+0096   00??           00365         MOVWF   _pwm_valor
+0097   2???           00366         GOTO    _00132_DS_
+0098                  00367 _00131_DS_
+                      00368 ;       .line   84; "interrupt.c"       BIT_FLP(PORTB, 6);
+0098   3040           00369         MOVLW   0x40
+0099   ???? ????      00370         BANKSEL _PORTB
+009B   06??           00371         XORWF   _PORTB,F
+                      00372 ;       .line   87; "interrupt.c"       pwm_valor = 6.5340 * (adc_result - 123) + 1023;
+009C   3085           00373         MOVLW   0x85
+009D   ???? ????      00374         BANKSEL _adc_result
+009F   07??           00375         ADDWF   _adc_result,W
+00A0   ???? ????      00376         BANKSEL r0x100B
+00A2   00??           00377         MOVWF   r0x100B
+00A3   30FF           00378         MOVLW   0xff
+00A4   00??           00379         MOVWF   r0x100C
+00A5   ???? ????      00380         BANKSEL _adc_result
+00A7   08??           00381         MOVF    (_adc_result + 1),W
+00A8   1803           00382         BTFSC   STATUS,0
+00A9   0A??           00383         INCF    (_adc_result + 1),W
+00AA   1903           00384         BTFSC   STATUS,2
+00AB   2???           00385         GOTO    _00002_DS_
+00AC   ???? ????      00386         BANKSEL r0x100C
+00AE   07??           00387         ADDWF   r0x100C,F
+00AF                  00388 _00002_DS_
+00AF   ???? ????      00389         BANKSEL r0x100B
+00B1   08??           00390         MOVF    r0x100B,W
+00B2   00??           00391         MOVWF   STK00
+00B3   08??           00392         MOVF    r0x100C,W
+00B4   ????           00393         PAGESEL ___sint2fs
+00B5   2???           00394         CALL    ___sint2fs
+00B6   ????           00395         PAGESEL $
+00B7   ???? ????      00396         BANKSEL r0x100D
+00B9   00??           00397         MOVWF   r0x100D
+00BA   08??           00398         MOVF    STK00,W
+00BB   00??           00399         MOVWF   r0x100E
+00BC   08??           00400         MOVF    STK01,W
+00BD   00??           00401         MOVWF   r0x100C
+00BE   08??           00402         MOVF    STK02,W
+00BF   00??           00403         MOVWF   r0x100B
+00C0   00??           00404         MOVWF   STK06
+00C1   08??           00405         MOVF    r0x100C,W
+00C2   00??           00406         MOVWF   STK05
+00C3   08??           00407         MOVF    r0x100E,W
+00C4   00??           00408         MOVWF   STK04
+00C5   08??           00409         MOVF    r0x100D,W
+00C6   00??           00410         MOVWF   STK03
+00C7   3087           00411         MOVLW   0x87
+00C8   00??           00412         MOVWF   STK02
+00C9   3016           00413         MOVLW   0x16
+00CA   00??           00414         MOVWF   STK01
+00CB   30D1           00415         MOVLW   0xd1
+gpasm-1.2.0 #980 (Jun  5 2013) build/default/   6-24-2015  15:41:23         PAGE  9
+
+
+LOC  OBJECT CODE     LINE SOURCE TEXT
+  VALUE
+
+00CC   00??           00416         MOVWF   STK00
+00CD   3040           00417         MOVLW   0x40
+00CE   ????           00418         PAGESEL ___fsmul
+00CF   2???           00419         CALL    ___fsmul
+00D0   ????           00420         PAGESEL $
+00D1   ???? ????      00421         BANKSEL r0x100D
+00D3   00??           00422         MOVWF   r0x100D
+00D4   08??           00423         MOVF    STK00,W
+00D5   00??           00424         MOVWF   r0x100E
+00D6   08??           00425         MOVF    STK01,W
+00D7   00??           00426         MOVWF   r0x100C
+00D8   08??           00427         MOVF    STK02,W
+00D9   00??           00428         MOVWF   r0x100B
+00DA   3000           00429         MOVLW   0x00
+00DB   00??           00430         MOVWF   STK06
+00DC   30C0           00431         MOVLW   0xc0
+00DD   00??           00432         MOVWF   STK05
+00DE   307F           00433         MOVLW   0x7f
+00DF   00??           00434         MOVWF   STK04
+00E0   3044           00435         MOVLW   0x44
+00E1   00??           00436         MOVWF   STK03
+00E2   08??           00437         MOVF    r0x100B,W
+00E3   00??           00438         MOVWF   STK02
+00E4   08??           00439         MOVF    r0x100C,W
+00E5   00??           00440         MOVWF   STK01
+00E6   08??           00441         MOVF    r0x100E,W
+00E7   00??           00442         MOVWF   STK00
+00E8   08??           00443         MOVF    r0x100D,W
+00E9   ????           00444         PAGESEL ___fsadd
+00EA   2???           00445         CALL    ___fsadd
+00EB   ????           00446         PAGESEL $
+00EC   ???? ????      00447         BANKSEL r0x100D
+00EE   00??           00448         MOVWF   r0x100D
+00EF   08??           00449         MOVF    STK00,W
+00F0   00??           00450         MOVWF   r0x100E
+00F1   08??           00451         MOVF    STK01,W
+00F2   00??           00452         MOVWF   r0x100C
+00F3   08??           00453         MOVF    STK02,W
+00F4   00??           00454         MOVWF   r0x100B
+00F5   00??           00455         MOVWF   STK02
+00F6   08??           00456         MOVF    r0x100C,W
+00F7   00??           00457         MOVWF   STK01
+00F8   08??           00458         MOVF    r0x100E,W
+00F9   00??           00459         MOVWF   STK00
+00FA   08??           00460         MOVF    r0x100D,W
+00FB   ????           00461         PAGESEL ___fs2sint
+00FC   2???           00462         CALL    ___fs2sint
+00FD   ????           00463         PAGESEL $
+00FE   ???? ????      00464         BANKSEL _pwm_valor
+0100   00??           00465         MOVWF   (_pwm_valor + 1)
+0101   08??           00466         MOVF    STK00,W
+0102   00??           00467         MOVWF   _pwm_valor
+                      00468 ;;swapping arguments (AOP_TYPEs 1/3)
+gpasm-1.2.0 #980 (Jun  5 2013) build/default/   6-24-2015  15:41:23         PAGE 10
+
+
+LOC  OBJECT CODE     LINE SOURCE TEXT
+  VALUE
+
+                      00469 ;;signed compare: left >= lit(0x400=1024), size=2, mask=ffff
+                      00470 ;       .line   88; "interrupt.c"       if (pwm_valor > 1023)
+0103   08??           00471         MOVF    (_pwm_valor + 1),W
+0104   3E80           00472         ADDLW   0x80
+0105   3E7C           00473         ADDLW   0x7c
+0106   1D03           00474         BTFSS   STATUS,2
+0107   2???           00475         GOTO    _00164_DS_
+0108   3000           00476         MOVLW   0x00
+0109   02??           00477         SUBWF   _pwm_valor,W
+010A                  00478 _00164_DS_
+010A   1C03           00479         BTFSS   STATUS,0
+010B   2???           00480         GOTO    _00128_DS_
+                      00481 ;;genSkipc:3247: created from rifx:0xffce0614
+                      00482 ;       .line   89; "interrupt.c"       pwm_valor = 1023;
+010C   30FF           00483         MOVLW   0xff
+010D   ???? ????      00484         BANKSEL _pwm_valor
+010F   00??           00485         MOVWF   _pwm_valor
+0110   3003           00486         MOVLW   0x03
+0111   00??           00487         MOVWF   (_pwm_valor + 1)
+0112   2???           00488         GOTO    _00132_DS_
+                      00489 ;;signed compare: left < lit(0x15E=350), size=2, mask=ffff
+0113                  00490 _00128_DS_
+                      00491 ;       .line   90; "interrupt.c"       else if (pwm_valor < 350)
+0113   ???? ????      00492         BANKSEL _pwm_valor
+0115   08??           00493         MOVF    (_pwm_valor + 1),W
+0116   3E80           00494         ADDLW   0x80
+0117   3E7F           00495         ADDLW   0x7f
+0118   1D03           00496         BTFSS   STATUS,2
+0119   2???           00497         GOTO    _00165_DS_
+011A   305E           00498         MOVLW   0x5e
+011B   02??           00499         SUBWF   _pwm_valor,W
+011C                  00500 _00165_DS_
+011C   1803           00501         BTFSC   STATUS,0
+011D   2???           00502         GOTO    _00132_DS_
+                      00503 ;;genSkipc:3247: created from rifx:0xffce0614
+                      00504 ;       .line   91; "interrupt.c"       pwm_valor = 350;
+011E   305E           00505         MOVLW   0x5e
+011F   ???? ????      00506         BANKSEL _pwm_valor
+0121   00??           00507         MOVWF   _pwm_valor
+0122   3001           00508         MOVLW   0x01
+0123   00??           00509         MOVWF   (_pwm_valor + 1)
+                      00510 ;;shiftRight_Left2ResultLit:5273: shCount=1, size=2, sign=1, same=0, offr=0
+0124                  00511 _00132_DS_
+                      00512 ;       .line   101; "interrupt.c"      CCPR1L = (pwm_valor >> 2) & 0x00ff;
+0124   1003           00513         BCF     STATUS,0
+0125   ???? ????      00514         BANKSEL (_pwm_valor + 1)
+0127   1B??           00515         BTFSC   (_pwm_valor + 1),7
+0128   1403           00516         BSF     STATUS,0
+0129   0C??           00517         RRF     (_pwm_valor + 1),W
+012A   ???? ????      00518         BANKSEL r0x100C
+012C   00??           00519         MOVWF   r0x100C
+012D   ???? ????      00520         BANKSEL _pwm_valor
+012F   0C??           00521         RRF     _pwm_valor,W
+gpasm-1.2.0 #980 (Jun  5 2013) build/default/   6-24-2015  15:41:23         PAGE 11
+
+
+LOC  OBJECT CODE     LINE SOURCE TEXT
+  VALUE
+
+0130   ???? ????      00522         BANKSEL r0x100B
+0132   00??           00523         MOVWF   r0x100B
+                      00524 ;;shiftRight_Left2ResultLit:5273: shCount=1, size=2, sign=1, same=1, offr=0
+0133   1003           00525         BCF     STATUS,0
+0134   1B??           00526         BTFSC   r0x100C,7
+0135   1403           00527         BSF     STATUS,0
+0136   0C??           00528         RRF     r0x100C,F
+0137   0C??           00529         RRF     r0x100B,F
+0138   01??           00530         CLRF    r0x100C
+0139   08??           00531         MOVF    r0x100B,W
+013A   ???? ????      00532         BANKSEL _CCPR1L
+013C   00??           00533         MOVWF   _CCPR1L
+                      00534 ;       .line   102; "interrupt.c"      CCP1Y = pwm_valor & 0x0001;
+013D   ???? ????      00535         BANKSEL _pwm_valor
+013F   08??           00536         MOVF    _pwm_valor,W
+0140   3901           00537         ANDLW   0x01
+0141   ???? ????      00538         BANKSEL r0x100B
+0143   00??           00539         MOVWF   r0x100B
+0144   00??           00540         MOVWF   r0x100C
+0145   0C??           00541         RRF     r0x100C,W
+0146   1803           00542         BTFSC   STATUS,0
+0147   2???           00543         GOTO    _00003_DS_
+0148   ???? ????      00544         BANKSEL _CCP1CONbits
+014A   12??           00545         BCF     _CCP1CONbits,4
+014B                  00546 _00003_DS_
+014B   1C03           00547         BTFSS   STATUS,0
+014C   2???           00548         GOTO    _00004_DS_
+014D   ???? ????      00549         BANKSEL _CCP1CONbits
+014F   16??           00550         BSF     _CCP1CONbits,4
+0150                  00551 _00004_DS_
+                      00552 ;       .line   103; "interrupt.c"      CCP1X = (pwm_valor & 0x0002) >> 1;
+0150   3002           00553         MOVLW   0x02
+0151   ???? ????      00554         BANKSEL _pwm_valor
+0153   05??           00555         ANDWF   _pwm_valor,W
+0154   ???? ????      00556         BANKSEL r0x100B
+0156   00??           00557         MOVWF   r0x100B
+0157   01??           00558         CLRF    r0x100C
+                      00559 ;;shiftRight_Left2ResultLit:5273: shCount=1, size=2, sign=1, same=0, offr=0
+0158   1003           00560         BCF     STATUS,0
+0159   1B??           00561         BTFSC   r0x100C,7
+015A   1403           00562         BSF     STATUS,0
+015B   0C??           00563         RRF     r0x100C,W
+015C   00??           00564         MOVWF   r0x100D
+015D   0C??           00565         RRF     r0x100B,W
+015E   00??           00566         MOVWF   r0x100E
+015F   00??           00567         MOVWF   r0x100B
+0160   0C??           00568         RRF     r0x100B,W
+0161   1803           00569         BTFSC   STATUS,0
+0162   2???           00570         GOTO    _00005_DS_
+0163   ???? ????      00571         BANKSEL _CCP1CONbits
+0165   12??           00572         BCF     _CCP1CONbits,5
+0166                  00573 _00005_DS_
+0166   1C03           00574         BTFSS   STATUS,0
+gpasm-1.2.0 #980 (Jun  5 2013) build/default/   6-24-2015  15:41:23         PAGE 12
+
+
+LOC  OBJECT CODE     LINE SOURCE TEXT
+  VALUE
+
+0167   2???           00575         GOTO    _00006_DS_
+0168   ???? ????      00576         BANKSEL _CCP1CONbits
+016A   16??           00577         BSF     _CCP1CONbits,5
+016B                  00578 _00006_DS_
+                      00579 ;       .line   106; "interrupt.c"      adc_start(adc_canal);
+016B   ???? ????      00580         BANKSEL _adc_canal
+016D   08??           00581         MOVF    _adc_canal,W
+016E   ????           00582         PAGESEL _adc_start
+016F   2???           00583         CALL    _adc_start
+0170   ????           00584         PAGESEL $
+                      00585 ;;102   MOVF    (_ciclos + 1),W
+0171                  00586 _00134_DS_
+                      00587 ;       .line   108; "interrupt.c"      TMR1H = (ciclos >> 8);
+0171   ???? ????      00588         BANKSEL r0x100E
+0173   01??           00589         CLRF    r0x100E
+                      00590 ;;101   MOVF    r0x100B,W
+0174   ???? ????      00591         BANKSEL _ciclos
+0176   08??           00592         MOVF    (_ciclos + 1),W
+0177   ???? ????      00593         BANKSEL r0x100B
+0179   00??           00594         MOVWF   r0x100B
+017A   ???? ????      00595         BANKSEL _TMR1H
+017C   00??           00596         MOVWF   _TMR1H
+                      00597 ;;100   MOVF    _ciclos,W
+                      00598 ;       .line   109; "interrupt.c"      TMR1L = (ciclos & 0x00FF);
+017D   ???? ????      00599         BANKSEL r0x100E
+017F   01??           00600         CLRF    r0x100E
+                      00601 ;;99    MOVF    r0x100B,W
+0180   ???? ????      00602         BANKSEL _ciclos
+0182   08??           00603         MOVF    _ciclos,W
+0183   ???? ????      00604         BANKSEL r0x100B
+0185   00??           00605         MOVWF   r0x100B
+0186   ???? ????      00606         BANKSEL _TMR1L
+0188   00??           00607         MOVWF   _TMR1L
+                      00608 ;       .line   110; "interrupt.c"      BIT_CLR(PIR1, 0);
+0189   08??           00609         MOVF    _PIR1,W
+018A   ???? ????      00610         BANKSEL r0x100B
+018C   00??           00611         MOVWF   r0x100B
+018D   30FE           00612         MOVLW   0xfe
+018E   05??           00613         ANDWF   r0x100B,W
+018F   ???? ????      00614         BANKSEL _PIR1
+0191   00??           00615         MOVWF   _PIR1
+0192                  00616 _00136_DS_
+                      00617 ;       .line   113; "interrupt.c"      if (BIT_TST(PIR1, 6))
+0192   ???? ????      00618         BANKSEL _PIR1
+0194   08??           00619         MOVF    _PIR1,W
+0195   3940           00620         ANDLW   0x40
+0196   1D03           00621         BTFSS   STATUS,2
+0197   3001           00622         MOVLW   0x01
+0198   ???? ????      00623         BANKSEL r0x100B
+019A   00??           00624         MOVWF   r0x100B
+019B   08??           00625         MOVF    r0x100B,W
+019C   1903           00626         BTFSC   STATUS,2
+019D   2???           00627         GOTO    _00138_DS_
+gpasm-1.2.0 #980 (Jun  5 2013) build/default/   6-24-2015  15:41:23         PAGE 13
+
+
+LOC  OBJECT CODE     LINE SOURCE TEXT
+  VALUE
+
+                      00628 ;       .line   117; "interrupt.c"      BIT_FLP(PORTB, 2);
+019E   3004           00629         MOVLW   0x04
+019F   ???? ????      00630         BANKSEL _PORTB
+01A1   06??           00631         XORWF   _PORTB,F
+                      00632 ;       .line   119; "interrupt.c"      adc_result = ADRESH;
+01A2   08??           00633         MOVF    _ADRESH,W
+01A3   ???? ????      00634         BANKSEL _adc_result
+01A5   00??           00635         MOVWF   _adc_result
+01A6   01??           00636         CLRF    (_adc_result + 1)
+                      00637 ;       .line   120; "interrupt.c"      adc_result <<= 8;
+01A7   08??           00638         MOVF    _adc_result,W
+01A8   00??           00639         MOVWF   (_adc_result + 1)
+01A9   01??           00640         CLRF    _adc_result
+                      00641 ;       .line   121; "interrupt.c"      adc_result += ADRESL;
+01AA   ???? ????      00642         BANKSEL _ADRESL
+01AC   08??           00643         MOVF    _ADRESL,W
+01AD   ???? ????      00644         BANKSEL r0x100B
+01AF   00??           00645         MOVWF   r0x100B
+01B0   01??           00646         CLRF    r0x100D
+01B1   08??           00647         MOVF    r0x100B,W
+01B2   ???? ????      00648         BANKSEL _adc_result
+01B4   07??           00649         ADDWF   _adc_result,F
+01B5   3000           00650         MOVLW   0x00
+01B6   1C03           00651         BTFSS   STATUS,0
+01B7   2???           00652         GOTO    _00007_DS_
+01B8   ???? ????      00653         BANKSEL r0x100D
+01BA   0A??           00654         INCF    r0x100D,W
+01BB   1903           00655         BTFSC   STATUS,2
+01BC   2???           00656         GOTO    _00008_DS_
+01BD                  00657 _00007_DS_
+01BD   ???? ????      00658         BANKSEL _adc_result
+01BF   07??           00659         ADDWF   (_adc_result + 1),F
+01C0                  00660 _00008_DS_
+                      00661 ;       .line   122; "interrupt.c"      BIT_CLR(PIR1, 6);
+01C0   ???? ????      00662         BANKSEL _PIR1
+01C2   08??           00663         MOVF    _PIR1,W
+01C3   ???? ????      00664         BANKSEL r0x100B
+01C5   00??           00665         MOVWF   r0x100B
+01C6   30BF           00666         MOVLW   0xbf
+01C7   05??           00667         ANDWF   r0x100B,W
+01C8   ???? ????      00668         BANKSEL _PIR1
+01CA   00??           00669         MOVWF   _PIR1
+01CB                  00670 _00138_DS_
+                      00671 ;       .line   125; "interrupt.c"      if (BIT_TST(INTCON, 1))
+01CB   ???? ????      00672         BANKSEL _INTCON
+01CD   08??           00673         MOVF    _INTCON,W
+01CE   3902           00674         ANDLW   0x02
+01CF   1D03           00675         BTFSS   STATUS,2
+01D0   3001           00676         MOVLW   0x01
+01D1   ???? ????      00677         BANKSEL r0x100B
+01D3   00??           00678         MOVWF   r0x100B
+01D4   08??           00679         MOVF    r0x100B,W
+01D5   1903           00680         BTFSC   STATUS,2
+gpasm-1.2.0 #980 (Jun  5 2013) build/default/   6-24-2015  15:41:23         PAGE 14
+
+
+LOC  OBJECT CODE     LINE SOURCE TEXT
+  VALUE
+
+01D6   2???           00681         GOTO    _00141_DS_
+                      00682 ;       .line   129; "interrupt.c"      BIT_FLP(PORTB, 1);
+01D7   3002           00683         MOVLW   0x02
+01D8   ???? ????      00684         BANKSEL _PORTB
+01DA   06??           00685         XORWF   _PORTB,F
+                      00686 ;       .line   131; "interrupt.c"      adc_canal = ~adc_canal;
+01DB   ???? ????      00687         BANKSEL _adc_canal
+01DD   09??           00688         COMF    _adc_canal,F
+                      00689 ;       .line   132; "interrupt.c"      BIT_CLR(INTCON, 1);
+01DE   ???? ????      00690         BANKSEL _INTCON
+01E0   08??           00691         MOVF    _INTCON,W
+01E1   ???? ????      00692         BANKSEL r0x100B
+01E3   00??           00693         MOVWF   r0x100B
+01E4   30FD           00694         MOVLW   0xfd
+01E5   05??           00695         ANDWF   r0x100B,W
+01E6   ???? ????      00696         BANKSEL _INTCON
+01E8   00??           00697         MOVWF   _INTCON
+01E9                  00698 _00141_DS_
+01E9   ???? ????      00699         BANKSEL ___sdcc_saved_fsr
+01EB   08??           00700         MOVF    ___sdcc_saved_fsr,W
+01EC   1283 1303      00701         BANKSEL FSR
+01EE   0084           00702         MOVWF   FSR
+01EF   08??           00703         MOVF    PSAVE,W
+01F0   008A           00704         MOVWF   PCLATH
+01F1   0183           00705         CLRF    STATUS
+01F2   0E??           00706         SWAPF   SSAVE,W
+01F3   0083           00707         MOVWF   STATUS
+01F4   0E??           00708         SWAPF   WSAVE,F
+01F5   0E??           00709         SWAPF   WSAVE,W
+01F6                  00710 END_OF_INTERRUPT
+01F6   0009           00711         RETFIE  
+                      00712 
+                      00713 ;--------------------------------------------------------
+                      00714 ; code
+                      00715 ;--------------------------------------------------------
+                      00716 code_interrupt  code
+                      00717 ;***
+                      00718 ;  pBlock Stats: dbName = C
+                      00719 ;***
+                      00720 ;entry:  _interrupt_global_enable       ;Function start
+                      00721 ; 2 exit points
+                      00722 ;has an exit
+                      00723 ;; Starting pCode block
+0000                  00724 _interrupt_global_enable        ;Function start
+                      00725 ; 2 exit points
+                      00726 ;       .line   58; "interrupt.c"       BIT_SET(INTCON, 7);
+0000   ???? ????      00727         BANKSEL _INTCON
+0002   17??           00728         BSF     _INTCON,7
+0003   0008           00729         RETURN  
+                      00730 ; exit point of _interrupt_global_enable
+                      00731 
+                      00732 ;***
+                      00733 ;  pBlock Stats: dbName = C
+gpasm-1.2.0 #980 (Jun  5 2013) build/default/   6-24-2015  15:41:23         PAGE 15
+
+
+LOC  OBJECT CODE     LINE SOURCE TEXT
+  VALUE
+
+                      00734 ;***
+                      00735 ;entry:  _interrupt_peripheral_enable   ;Function start
+                      00736 ; 2 exit points
+                      00737 ;has an exit
+                      00738 ;; Starting pCode block
+0004                  00739 _interrupt_peripheral_enable    ;Function start
+                      00740 ; 2 exit points
+                      00741 ;       .line   52; "interrupt.c"       BIT_SET(INTCON, 6);
+0004   ???? ????      00742         BANKSEL _INTCON
+0006   17??           00743         BSF     _INTCON,6
+0007   0008           00744         RETURN  
+                      00745 ; exit point of _interrupt_peripheral_enable
+                      00746 
+                      00747 ;***
+                      00748 ;  pBlock Stats: dbName = C
+                      00749 ;***
+                      00750 ;entry:  _interrupt_timer_enable        ;Function start
+                      00751 ; 2 exit points
+                      00752 ;has an exit
+                      00753 ;1 compiler assigned register :
+                      00754 ;   r0x1008
+                      00755 ;; Starting pCode block
+0008                  00756 _interrupt_timer_enable ;Function start
+                      00757 ; 2 exit points
+                      00758 ;       .line   44; "interrupt.c"       BIT_CLR(PIR1, 0);
+0008   ???? ????      00759         BANKSEL _PIR1
+000A   08??           00760         MOVF    _PIR1,W
+000B   ???? ????      00761         BANKSEL r0x1008
+000D   00??           00762         MOVWF   r0x1008
+000E   30FE           00763         MOVLW   0xfe
+000F   05??           00764         ANDWF   r0x1008,W
+0010   ???? ????      00765         BANKSEL _PIR1
+0012   00??           00766         MOVWF   _PIR1
+                      00767 ;       .line   46; "interrupt.c"       BIT_SET(PIE1, 0);
+0013   ???? ????      00768         BANKSEL _PIE1
+0015   14??           00769         BSF     _PIE1,0
+0016   0008           00770         RETURN  
+                      00771 ; exit point of _interrupt_timer_enable
+                      00772 
+                      00773 ;***
+                      00774 ;  pBlock Stats: dbName = C
+                      00775 ;***
+                      00776 ;entry:  _interrupt_adc_enable  ;Function start
+                      00777 ; 2 exit points
+                      00778 ;has an exit
+                      00779 ;1 compiler assigned register :
+                      00780 ;   r0x1009
+                      00781 ;; Starting pCode block
+0017                  00782 _interrupt_adc_enable   ;Function start
+                      00783 ; 2 exit points
+                      00784 ;       .line   36; "interrupt.c"       BIT_CLR(PIR1, 6);
+0017   ???? ????      00785         BANKSEL _PIR1
+0019   08??           00786         MOVF    _PIR1,W
+gpasm-1.2.0 #980 (Jun  5 2013) build/default/   6-24-2015  15:41:23         PAGE 16
+
+
+LOC  OBJECT CODE     LINE SOURCE TEXT
+  VALUE
+
+001A   ???? ????      00787         BANKSEL r0x1009
+001C   00??           00788         MOVWF   r0x1009
+001D   30BF           00789         MOVLW   0xbf
+001E   05??           00790         ANDWF   r0x1009,W
+001F   ???? ????      00791         BANKSEL _PIR1
+0021   00??           00792         MOVWF   _PIR1
+                      00793 ;       .line   38; "interrupt.c"       BIT_SET(PIE1, 6);
+0022   ???? ????      00794         BANKSEL _PIE1
+0024   17??           00795         BSF     _PIE1,6
+0025   0008           00796         RETURN  
+                      00797 ; exit point of _interrupt_adc_enable
+                      00798 
+                      00799 ;***
+                      00800 ;  pBlock Stats: dbName = C
+                      00801 ;***
+                      00802 ;entry:  _interrupt_external_enable     ;Function start
+                      00803 ; 2 exit points
+                      00804 ;has an exit
+                      00805 ;1 compiler assigned register :
+                      00806 ;   r0x100A
+                      00807 ;; Starting pCode block
+0026                  00808 _interrupt_external_enable      ;Function start
+                      00809 ; 2 exit points
+                      00810 ;       .line   26; "interrupt.c"       BIT_CLR(OPTION_REG, 6);
+0026   ???? ????      00811         BANKSEL _OPTION_REG
+0028   08??           00812         MOVF    _OPTION_REG,W
+0029   ???? ????      00813         BANKSEL r0x100A
+002B   00??           00814         MOVWF   r0x100A
+002C   30BF           00815         MOVLW   0xbf
+002D   05??           00816         ANDWF   r0x100A,W
+002E   ???? ????      00817         BANKSEL _OPTION_REG
+0030   00??           00818         MOVWF   _OPTION_REG
+                      00819 ;       .line   28; "interrupt.c"       BIT_CLR(INTCON, 1);
+0031   ???? ????      00820         BANKSEL _INTCON
+0033   08??           00821         MOVF    _INTCON,W
+0034   ???? ????      00822         BANKSEL r0x100A
+0036   00??           00823         MOVWF   r0x100A
+0037   30FD           00824         MOVLW   0xfd
+0038   05??           00825         ANDWF   r0x100A,W
+0039   ???? ????      00826         BANKSEL _INTCON
+003B   00??           00827         MOVWF   _INTCON
+                      00828 ;       .line   30; "interrupt.c"       BIT_SET(INTCON, 4);
+003C   16??           00829         BSF     _INTCON,4
+003D   0008           00830         RETURN  
+                      00831 ; exit point of _interrupt_external_enable
+                      00832 
+                      00833 
+                      00834 ;       code size estimation:
+                      00835 ;         363+  108 =   471 instructions ( 1158 byte)
+                      00836 
+                      00837         end
+gpasm-1.2.0 #980 (Jun  5 2013) build/default/   6-24-2015  15:41:23         PAGE 17
+
+
+SYMBOL TABLE
+  LABEL                             VALUE
+
+ADCON0                            0000001F
+ADCON1                            0000009F
+ADCS0                             00000006
+ADCS1                             00000007
+ADCS2                             00000006
+ADDEN                             00000003
+ADFM                              00000007
+ADIE                              00000006
+ADIF                              00000006
+ADON                              00000000
+ADRESH                            0000001E
+ADRESL                            0000009E
+ANS0                              00000000
+ANS1                              00000001
+ANS2                              00000002
+ANS3                              00000003
+ANS4                              00000004
+ANS5                              00000005
+ANS6                              00000006
+ANSEL                             0000009B
+BF                                00000000
+BRGH                              00000002
+C                                 00000000
+C1INV                             00000004
+C1OUT                             00000006
+C2INV                             00000005
+C2OUT                             00000007
+CCP1CON                           00000017
+CCP1IE                            00000002
+CCP1IF                            00000002
+CCP1M0                            00000000
+CCP1M1                            00000001
+CCP1M2                            00000002
+CCP1M3                            00000003
+CCP1X                             00000005
+CCP1Y                             00000004
+CCPR1                             00000015
+CCPR1H                            00000016
+CCPR1L                            00000015
+CHS0                              00000003
+CHS1                              00000004
+CHS2                              00000005
+CIS                               00000003
+CKE                               00000006
+CKP                               00000004
+CM0                               00000000
+CM1                               00000001
+CM2                               00000002
+CMCON                             0000009C
+CMIE                              00000006
+CMIF                              00000006
+CREN                              00000004
+CSRC                              00000007
+gpasm-1.2.0 #980 (Jun  5 2013) build/default/   6-24-2015  15:41:23         PAGE 18
+
+
+SYMBOL TABLE
+  LABEL                             VALUE 
+
+CVR0                              00000000
+CVR1                              00000001
+CVR2                              00000002
+CVR3                              00000003
+CVRCON                            0000009D
+CVREN                             00000007
+CVROE                             00000006
+CVRR                              00000005
+D                                 00000005
+DATA_ADDRESS                      00000005
+DC                                00000001
+D_A                               00000005
+D_NOT_A                           00000005
+EEADR                             0000010D
+EEADRH                            0000010F
+EECON1                            0000018C
+EECON2                            0000018D
+EEDATA                            0000010C
+EEDATH                            0000010E
+EEIE                              00000004
+EEIF                              00000004
+EEPGD                             00000007
+END_OF_INTERRUPT                  000001F6
+F                                 00000001
+FERR                              00000002
+FREE                              00000004
+FSR                               00000004
+GIE                               00000007
+GO                                00000002
+GO_DONE                           00000002
+GO_NOT_DONE                       00000002
+I2C_DATA                          00000005
+I2C_READ                          00000002
+I2C_START                         00000003
+I2C_STOP                          00000004
+INDF                              00000000
+INT0IE                            00000004
+INT0IF                            00000001
+INTCON                            0000000B
+INTE                              00000004
+INTEDG                            00000006
+INTF                              00000001
+IOFS                              00000002
+IRCF0                             00000004
+IRCF1                             00000005
+IRCF2                             00000006
+IRP                               00000007
+NOT_A                             00000005
+NOT_ADDRESS                       00000005
+NOT_BO                            00000000
+NOT_BOR                           00000000
+NOT_DONE                          00000002
+NOT_PD                            00000003
+gpasm-1.2.0 #980 (Jun  5 2013) build/default/   6-24-2015  15:41:23         PAGE 19
+
+
+SYMBOL TABLE
+  LABEL                             VALUE 
+
+NOT_POR                           00000001
+NOT_RBPU                          00000007
+NOT_RC8                           00000006
+NOT_T1SYNC                        00000002
+NOT_TO                            00000004
+NOT_TX8                           00000006
+NOT_W                             00000002
+NOT_WRITE                         00000002
+OERR                              00000001
+OPTION_REG                        00000081
+OSCCON                            0000008F
+OSCTUNE                           00000090
+OSFIE                             00000007
+OSFIF                             00000007
+OSTS                              00000003
+P                                 00000004
+PCL                               00000002
+PCLATH                            0000000A
+PCON                              0000008E
+PEIE                              00000006
+PIE1                              0000008C
+PIE2                              0000008D
+PIR1                              0000000C
+PIR2                              0000000D
+PORTA                             00000005
+PORTB                             00000006
+PR2                               00000092
+PS0                               00000000
+PS1                               00000001
+PS2                               00000002
+PSA                               00000003
+PSAVE                             00000000
+R                                 00000002
+RA0                               00000000
+RA1                               00000001
+RA2                               00000002
+RA3                               00000003
+RA4                               00000004
+RA5                               00000005
+RA6                               00000006
+RA7                               00000007
+RB0                               00000000
+RB1                               00000001
+RB2                               00000002
+RB3                               00000003
+RB4                               00000004
+RB5                               00000005
+RB6                               00000006
+RB7                               00000007
+RBIE                              00000003
+RBIF                              00000000
+RC8_9                             00000006
+RC9                               00000006
+gpasm-1.2.0 #980 (Jun  5 2013) build/default/   6-24-2015  15:41:23         PAGE 20
+
+
+SYMBOL TABLE
+  LABEL                             VALUE 
+
+RCD8                              00000000
+RCIE                              00000005
+RCIF                              00000005
+RCREG                             0000001A
+RCSTA                             00000018
+RD                                00000000
+READ_WRITE                        00000002
+RP0                               00000005
+RP1                               00000006
+RX9                               00000006
+RX9D                              00000000
+R_NOT_W                           00000002
+R_W                               00000002
+S                                 00000003
+SCS0                              00000000
+SCS1                              00000001
+SMP                               00000007
+SPBRG                             00000099
+SPEN                              00000007
+SREN                              00000005
+SSAVE                             00000000
+SSPADD                            00000093
+SSPBUF                            00000013
+SSPCON                            00000014
+SSPEN                             00000005
+SSPIE                             00000003
+SSPIF                             00000003
+SSPM0                             00000000
+SSPM1                             00000001
+SSPM2                             00000002
+SSPM3                             00000003
+SSPOV                             00000006
+SSPSTAT                           00000094
+STATUS                            00000003
+STK00                             00000000
+STK01                             00000000
+STK02                             00000000
+STK03                             00000000
+STK04                             00000000
+STK05                             00000000
+STK06                             00000000
+STK07                             00000000
+STK08                             00000000
+STK09                             00000000
+STK10                             00000000
+STK11                             00000000
+STK12                             00000000
+SWDTE                             00000000
+SWDTEN                            00000000
+SYNC                              00000004
+T0CS                              00000005
+T0SE                              00000004
+T1CKPS0                           00000004
+gpasm-1.2.0 #980 (Jun  5 2013) build/default/   6-24-2015  15:41:23         PAGE 21
+
+
+SYMBOL TABLE
+  LABEL                             VALUE 
+
+T1CKPS1                           00000005
+T1CON                             00000010
+T1INSYNC                          00000002
+T1OSCEN                           00000003
+T1RUN                             00000006
+T2CKPS0                           00000000
+T2CKPS1                           00000001
+T2CON                             00000012
+TMR0                              00000001
+TMR0IE                            00000005
+TMR0IF                            00000002
+TMR1                              0000000E
+TMR1CS                            00000001
+TMR1H                             0000000F
+TMR1IE                            00000000
+TMR1IF                            00000000
+TMR1L                             0000000E
+TMR1ON                            00000000
+TMR2                              00000011
+TMR2IE                            00000001
+TMR2IF                            00000001
+TMR2ON                            00000002
+TOUTPS0                           00000003
+TOUTPS1                           00000004
+TOUTPS2                           00000005
+TOUTPS3                           00000006
+TRISA                             00000085
+TRISA0                            00000000
+TRISA1                            00000001
+TRISA2                            00000002
+TRISA3                            00000003
+TRISA4                            00000004
+TRISA5                            00000005
+TRISA6                            00000006
+TRISA7                            00000007
+TRISB                             00000086
+TRISB0                            00000000
+TRISB1                            00000001
+TRISB2                            00000002
+TRISB3                            00000003
+TRISB4                            00000004
+TRISB5                            00000005
+TRISB6                            00000006
+TRISB7                            00000007
+TRMT                              00000001
+TUN0                              00000000
+TUN1                              00000001
+TUN2                              00000002
+TUN3                              00000003
+TUN4                              00000004
+TUN5                              00000005
+TX8_9                             00000006
+TX9                               00000006
+gpasm-1.2.0 #980 (Jun  5 2013) build/default/   6-24-2015  15:41:23         PAGE 22
+
+
+SYMBOL TABLE
+  LABEL                             VALUE 
+
+TX9D                              00000000
+TXD8                              00000000
+TXEN                              00000005
+TXIE                              00000004
+TXIF                              00000004
+TXREG                             00000019
+TXSTA                             00000098
+UA                                00000001
+VCFG0                             00000004
+VCFG1                             00000005
+W                                 00000000
+WCOL                              00000007
+WDTCON                            00000105
+WDTPS0                            00000001
+WDTPS1                            00000002
+WDTPS2                            00000003
+WDTPS3                            00000004
+WR                                00000001
+WREN                              00000002
+WRERR                             00000003
+WSAVE                             00000000
+Z                                 00000002
+_00001_DS_                        00000043
+_00002_DS_                        000000AF
+_00003_DS_                        0000014B
+_00004_DS_                        00000150
+_00005_DS_                        00000166
+_00006_DS_                        0000016B
+_00007_DS_                        000001BD
+_00008_DS_                        000001C0
+_00128_DS_                        00000113
+_00131_DS_                        00000098
+_00132_DS_                        00000124
+_00134_DS_                        00000171
+_00136_DS_                        00000192
+_00138_DS_                        000001CB
+_00141_DS_                        000001E9
+_00164_DS_                        0000010A
+_00165_DS_                        0000011C
+_ADCON0                           00000000
+_ADCON0bits                       00000000
+_ADCON1                           00000000
+_ADCON1bits                       00000000
+_ADRESH                           00000000
+_ADRESL                           00000000
+_ANSEL                            00000000
+_ANSELbits                        00000000
+_BODEN_OFF                        00003FBF
+_BODEN_ON                         00003FFF
+_BOREN_OFF                        00003FBF
+_BOREN_ON                         00003FFF
+_CCP1CON                          00000000
+_CCP1CONbits                      00000000
+gpasm-1.2.0 #980 (Jun  5 2013) build/default/   6-24-2015  15:41:23         PAGE 23
+
+
+SYMBOL TABLE
+  LABEL                             VALUE 
+
+_CCP1_RB0                         00003FFF
+_CCP1_RB3                         00002FFF
+_CCPMX_RB0                        00003FFF
+_CCPMX_RB3                        00002FFF
+_CCPR1                            00000000
+_CCPR1H                           00000000
+_CCPR1L                           00000000
+_CMCON                            00000000
+_CMCONbits                        00000000
+_CONFIG1                          00002007
+_CONFIG2                          00002008
+_CPD_OFF                          00003FFF
+_CPD_ON                           00003EFF
+_CP_ALL                           00001FFF
+_CP_OFF                           00003FFF
+_CP_ON                            00001FFF
+_CVRCON                           00000000
+_CVRCONbits                       00000000
+_DEBUG_OFF                        00003FFF
+_DEBUG_ON                         000037FF
+_DEVID1                           00002006
+_EEADR                            00000000
+_EEADRH                           00000000
+_EECON1                           00000000
+_EECON1bits                       00000000
+_EECON2                           00000000
+_EEDATA                           00000000
+_EEDATH                           00000000
+_EXTCLK                           00003FEF
+_EXTRC_CLKOUT                     00003FFF
+_EXTRC_IO                         00003FFE
+_FCMEN_OFF                        00003FFE
+_FCMEN_ON                         00003FFF
+_FOSC_EC                          00003FEF
+_FOSC_EXTRCCLK                    00003FFF
+_FOSC_EXTRCIO                     00003FFE
+_FOSC_HS                          00003FEE
+_FOSC_INTOSCCLK                   00003FFD
+_FOSC_INTOSCIO                    00003FFC
+_FOSC_LP                          00003FEC
+_FOSC_XT                          00003FED
+_FSR                              00000000
+_HS_OSC                           00003FEE
+_IDLOC0                           00002000
+_IDLOC1                           00002001
+_IDLOC2                           00002002
+_IDLOC3                           00002003
+_IESO_OFF                         00003FFD
+_IESO_ON                          00003FFF
+_INDF                             00000000
+_INTCON                           00000000
+_INTCONbits                       00000000
+_INTRC_CLKOUT                     00003FFD
+gpasm-1.2.0 #980 (Jun  5 2013) build/default/   6-24-2015  15:41:23         PAGE 24
+
+
+SYMBOL TABLE
+  LABEL                             VALUE 
+
+_INTRC_IO                         00003FFC
+_LP_OSC                           00003FEC
+_LVP_OFF                          00003F7F
+_LVP_ON                           00003FFF
+_MCLRE_OFF                        00003FDF
+_MCLRE_ON                         00003FFF
+_MCLR_OFF                         00003FDF
+_MCLR_ON                          00003FFF
+_OPTION_REG                       00000000
+_OPTION_REGbits                   00000000
+_OSCCON                           00000000
+_OSCCONbits                       00000000
+_OSCTUNE                          00000000
+_OSCTUNEbits                      00000000
+_PCL                              00000000
+_PCLATH                           00000000
+_PCON                             00000000
+_PCONbits                         00000000
+_PIE1                             00000000
+_PIE1bits                         00000000
+_PIE2                             00000000
+_PIE2bits                         00000000
+_PIR1                             00000000
+_PIR1bits                         00000000
+_PIR2                             00000000
+_PIR2bits                         00000000
+_PORTA                            00000000
+_PORTAbits                        00000000
+_PORTB                            00000000
+_PORTBbits                        00000000
+_PR2                              00000000
+_PWRTE_OFF                        00003FFF
+_PWRTE_ON                         00003FF7
+_RCREG                            00000000
+_RCSTA                            00000000
+_RCSTAbits                        00000000
+_SPBRG                            00000000
+_SSPADD                           00000000
+_SSPBUF                           00000000
+_SSPCON                           00000000
+_SSPCONbits                       00000000
+_SSPSTAT                          00000000
+_SSPSTATbits                      00000000
+_STATUS                           00000000
+_STATUSbits                       00000000
+_T1CON                            00000000
+_T1CONbits                        00000000
+_T2CON                            00000000
+_T2CONbits                        00000000
+_TMR0                             00000000
+_TMR1                             00000000
+_TMR1H                            00000000
+_TMR1L                            00000000
+gpasm-1.2.0 #980 (Jun  5 2013) build/default/   6-24-2015  15:41:23         PAGE 25
+
+
+SYMBOL TABLE
+  LABEL                             VALUE 
+
+_TMR2                             00000000
+_TRISA                            00000000
+_TRISAbits                        00000000
+_TRISB                            00000000
+_TRISBbits                        00000000
+_TXREG                            00000000
+_TXSTA                            00000000
+_TXSTAbits                        00000000
+_WDTCON                           00000000
+_WDTCONbits                       00000000
+_WDTE_OFF                         00003FFB
+_WDTE_ON                          00003FFF
+_WDT_OFF                          00003FFB
+_WDT_ON                           00003FFF
+_WRT_2048                         00003BFF
+_WRT_256                          00003DFF
+_WRT_ALL                          000039FF
+_WRT_OFF                          00003FFF
+_WRT_PROTECT_2048                 00003BFF
+_WRT_PROTECT_256                  00003DFF
+_WRT_PROTECT_ALL                  000039FF
+_WRT_PROTECT_OFF                  00003FFF
+_XT_OSC                           00003FED
+__16F88                           00000001
+___fs2sint                        00000000
+___fsadd                          00000000
+___fsmul                          00000000
+___isr                            00000004
+___sdcc_saved_fsr                 00000000
+___sint2fs                        00000000
+__sdcc_interrupt                  00000004
+_adc_canal                        00000000
+_adc_init                         00000000
+_adc_result                       00000000
+_adc_start                        00000000
+_c_interrupt_004A                 0000004A
+_c_interrupt_0064                 00000064
+_c_interrupt_007F                 0000007F
+_c_interrupt_0091                 00000091
+_c_interrupt_00B6                 000000B6
+_c_interrupt_00D0                 000000D0
+_c_interrupt_00EB                 000000EB
+_c_interrupt_00FD                 000000FD
+_c_interrupt_0170                 00000170
+_ciclos                           00000000
+_interrupt_adc_enable             00000017
+_interrupt_external_enable        00000026
+_interrupt_global_enable          00000000
+_interrupt_peripheral_enable      00000004
+_interrupt_timer_enable           00000008
+_pwm_float                        00000000
+_pwm_init                         00000000
+_pwm_output                       00000000
+gpasm-1.2.0 #980 (Jun  5 2013) build/default/   6-24-2015  15:41:23         PAGE 26
+
+
+SYMBOL TABLE
+  LABEL                             VALUE 
+
+_pwm_valor                        00000000
+_timer_init                       00000000
+_timer_start                      00000000
+r0x1008                           00000002
+r0x1009                           00000001
+r0x100A                           00000000
+r0x100B                           00000003
+r0x100C                           00000004
+r0x100D                           00000006
+r0x100E                           00000005
+
+Errors   :     0
+Warnings :     0 reported,     0 suppressed
+Messages :     0 reported,     0 suppressed
+
+
